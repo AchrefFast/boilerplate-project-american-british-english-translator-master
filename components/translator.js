@@ -17,31 +17,33 @@ class Translator {
         const spanning = (word) => {
             return '<span class="highlight">' + word + '</span>'
         }
-
+        // If we're translating from american to british.
         if (toLanguage.toLowerCase() == 'am') {
-
+            // Convert time from american form to british form from 10:00 to 10.00.
             const regex_time = /(\d+?)([:])(\d+)/g;
             string = string.replace(regex_time, spanning('$1.$3'));
-
+            // Any word inside the text that could have another spelling in british english will be changed with the british spelling.
             for (let i = 0; i < amSpell.length; i++) {
                 let word = new RegExp("(?<!-)" + amSpell[i] + "(?!\\w)", 'gi');
                 string = string.replace(word, spanning(brSpell[i]));
             }
-
+            // Change the titles from american to british (e.g Mr. to Mr).
             for (let i = 0; i < amTitles.length; i++) {
                 let word = new RegExp(amTitles[i] + "(?!\\w)", 'gi');
                 let new_word = brTitles[i][0].toUpperCase() + brTitles[i].slice(1);
                 string = string.replace(word, spanning(new_word));
             }
-
+            // Translate words from american to british english if they do exist inside the submitted text.
             for (let i = 0; i < amOnlyKeys.length; i++) {
                 let word = new RegExp("(?<!-)" + amOnlyKeys[i] + "(?!\\w)", 'gi');
                 string = string.replace(word, spanning(americanOnly[amOnlyKeys[i]]));
             }
             return string;
         }
-
+        // If we traslating from british to american
         if (toLanguage.toLowerCase() == 'br') {
+
+            // Same thing but from british to american.
 
             const regex_time = /(\d+?)([.])(\d+)/g;
             string = string.replace(regex_time, spanning('$1:$3'));
